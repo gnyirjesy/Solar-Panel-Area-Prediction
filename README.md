@@ -26,10 +26,21 @@ a.	Data related to incentives, taxes, and tariffs around solar energy\
 b.	Source: NC State Clean Energy Technology Center
 
 ## Results
+XGBoost performed the best for both the Residential and Non-Residential models.
 
 | Target Sector | Method | Architecture | Best MSE | R<sup>2</sup> | Top <br> Features|
 | ------------- | ------ | ------------ | -------- | ------------- | ------- |
-Residential | Random <br> Forest | n_estimators: 1000 <br> min_samples_split: 5 <br> | 552 | 0.753 | education college <br> daily solar radiation <br> heating gas fuel
+Residential | Random <br> Forest | n_estimators: 1000 <br> min_samples_split: 5 <br> min_samples_leaf: 5 <br> max_features: 'sqrt' <br> max_depth: 20 <br> bootstrap: False| 552 | 0.753 | Education college <br> Daily solar radiation <br> Heating gas fuel | 
+| Residential | XGBoost | n_estimators: 1000 <br> learning_rate: 0.01 | 503 | 0.769 | Incentive count residential <br> Daily solar radiation <br> Education college |
+| Residential | Neural <br> Network | 3 hidden layers (128 units each, ReLU activation function) | 616 | 0.723 | Frost days <br> Daily solar radiation | Housing unit median value
+| Non-<br>Residential | Random <br> Forest | Default | 49.6 | 0.249 | Total area <br> Population density <br> Relative humidity | 
+| Non-<br>Residential | XGBoost | reg_lambda: 3 <br> reg_alpha: 1 <br> n_estimators: 300 <br> min_child_weight: 10 <br> max_depth: 20 <br> learning_rate: 0.01 <br> gamma: 0 <br> col_sample_bytree: 0.8 <br> booster: gbtree | 47 | 0.28 | Daily solar radiation <br> Industrial electricity price <br> Heating fuel solar | 
+|Non-<br>Residential | Neural<br>Network | 3 hidden layers (128 units each, ReLU activation function) <br> 20% dropout between layers 2 and 3 | 50 | 0.227 | Population density <br> Frost days <br> Total area <br> Daily solar radiation
+
+## Future Work
+The non-residential models tended to have low correlation between predicted values and actual values. In the future, this model could be improved by performing an initial classification to determine if a FIPS location has any non-residential solar systems before implementing the regression model on only those locations with non-residential systems. This additional step would help to address the class imbalance where most counties do not have any non-residential solar systems. \
+Further improvements could also include implementing more extensive hyperparameter tuning using a grid search over all settings rather than a random sample. Grid search is a computational and time intensive process and therefore was not within the scope of this project.  
+
 ## Sources
 1.	IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press. In Press.
 2.	Kidd, D. (2021, June 16). US regulatory barriers to an ambitious Paris Agreement Commitment - Environmental & Energy Law Program. Harvard Law School. Retrieved December 21, 2021, from https://eelp.law.harvard.edu/2021/04/us-paris-commitment/ 
