@@ -38,10 +38,19 @@ Residential | Random <br> Forest | n_estimators: 1000 <br> min_samples_split: 5 
 |Non-<br>Residential | Neural<br>Network | 3 hidden layers (128 units each, ReLU activation function) <br> 20% dropout between layers 2 and 3 | 50 | 0.227 | Population density <br> Frost days <br> Total area <br> Daily solar radiation
 
 The below plots show the correlation between the predicted and actual values for the best performing models as well as the top features. 
-![Residential XGBoost Scatterplot](https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_system_count_errors_default.png?raw=TRUE)
-![Residential XGBoost Feature Importance](https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_fi.png?raw=TRUE)
-![Non-Residential XGBoost Scatterplot](https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_scatter.png?raw=TRUE)
-![Non-Residential XGBoost Feature Importance](https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_fi.png?raw=TRUE)
+
+### Residential Model Plots
+<p align="center">
+    <img src="https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_system_count_errors_default.png?raw=TRUE">
+    <img src = "https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_fi.png?raw=TRUE">
+</p>
+
+
+### Non-Residential Model Plots
+<p align="center">
+    <img src="https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_scatter.png?raw=TRUE">
+    <img src = "https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_fi.png?raw=TRUE">
+</p>
 
 ## Future Work
 The non-residential models tended to have low correlation between predicted values and actual values. In the future, this model could be improved by performing an initial classification to determine if a FIPS location has any non-residential solar systems before implementing the regression model on only those locations with non-residential systems. This additional step would help to address the class imbalance where most counties do not have any non-residential solar systems. \
