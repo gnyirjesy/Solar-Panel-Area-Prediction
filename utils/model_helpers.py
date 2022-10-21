@@ -1,7 +1,7 @@
 #Define functions for model training and evaluation 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplplot as plt
+import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorflow import keras
 
@@ -58,32 +58,29 @@ class training():
     '''
     A set of functions to show model training
     Functions:
-    plot_feature_importance: Function to plot the most important features in a model.
+    plot_history: Function to plot how the model is doing during training.
     
     '''     
-# Visualize the model's training progress using the stats stored in the history object. 
-# We want to use this data to determine how long to train before the model stops making progress.
-#code from Pierre Gentine - ML for Environmental Engineering class
-def plot_history(history, title=None):
-    '''
-        Description: Function to plot how the model is doing during training.
-        Visualize the model's training progress using the stats stored in the history object. 
+    def plot_history(history, title=None):
+        '''
+            Description: Function to plot how the model is doing during training.
+            Visualize the model's training progress using the stats stored in the history object. 
 
-        Inputs:
-            history: model training history
-            title: str, plot title
-        Outputs:
-            plot of the model train and validation loss
+            Inputs:
+                history: model training history
+                title: str, plot title
+            Outputs:
+                plot of the model train and validation loss
 
-        Code Source: Pierre Gentine - ML for Environmental Engineering class
-    '''
-    plt.figure()
-    plt.xlabel('Epoch')
-    plt.ylabel('Mean Sq. Error')
-    plt.title(title)
-    plt.plot(history.epoch, np.array(history.history['loss']),
-           label='Train Loss')
-    plt.plot(history.epoch, np.array(history.history['val_loss']),
-           label = 'Val loss')
-    plt.legend()
-    #plt.ylim([0, 5])
+            Code Source: Pierre Gentine - ML for Environmental Engineering class
+        '''
+        plt.figure()
+        plt.xlabel('Epoch')
+        plt.ylabel('Mean Sq. Error')
+        plt.title(title)
+        plt.plot(history.epoch, np.array(history.history['loss']),
+            label='Train Loss')
+        plt.plot(history.epoch, np.array(history.history['val_loss']),
+            label = 'Val loss')
+        plt.legend()
+        #plt.ylim([0, 5])
