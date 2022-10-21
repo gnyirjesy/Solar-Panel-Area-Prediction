@@ -107,20 +107,18 @@ class clean():
                 test_df: pd.DataFrame, test data
                 column: str, column to impute
                 group_column: str, column to group by for imputing
-                impute_value: str {'mean', 'median'}
+                impute_value: str {mean, median, zero}
         Output: dataframe with column with all missing values imputed to impute value
         """
         if impute_value == 'mean':
-            subset = train_df[[column,group_column]].groupby(group_column).mean()
+            subset = train_df.groupby(group_column)[column].mean().reset_index(name='impute_val')
         elif impute_value == 'median':
-            subset = train_df[[column,group_column]].groupby(group_column).median()
+            subset = train_df.groupby(group_column)[column].median().reset_index(name='impute_val')
         elif impute_value == 'zero':
-            train_df[column] = np.where(train_df[column].isna(), 0, df[column])
+            train_df[column] = np.where(train_df[column].isna(), 0, train_df[column])
             return(train_df)
         else:
-            raise Exception('That impute value is invalid. Options include mean or median.')
-        subset = subset.reset_index()
-        subset = subset.rename(columns={column: 'impute_val'})
+            raise Exception('Invalid impute value. Options include mean, median, or zero.')
         train_df = train_df.merge(subset, how='left', on=group_column)
         train_df[column] = np.where(train_df[column].isna(), train_df['impute_val'], train_df[column])
         train_df = train_df.drop('impute_val', axis=1)
