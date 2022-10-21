@@ -107,7 +107,7 @@ class clean():
                 test_df: pd.DataFrame, test data
                 column: str, column to impute
                 group_column: str, column to group by for imputing
-                impute_value: str ('mean', 'median')
+                impute_value: str {'mean', 'median'}
         Output: dataframe with column with all missing values imputed to impute value
         """
         if impute_value == 'mean':
@@ -143,10 +143,10 @@ class clean():
                 train and test pd.Dataframes with columns transformed by provided method.
         """
         pt = PowerTransformer(transformer)
-        pt.fit(train_data[cols])
-        train_data[cols] = pt.transform(train_data[cols])
-        test_data[cols] = pt.transform(test_data[cols])
-        return(train_data, test_data)
+        pt.fit(train_df[cols])
+        train_df[cols] = pt.transform(train_df[cols])
+        test_df[cols] = pt.transform(test_df[cols])
+        return(train_df, test_df)
 
     def remove_correlation(df: pd.DataFrame, target: str, threshold = .8):
         """
