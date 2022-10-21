@@ -2,7 +2,7 @@
 
 There is no denying the impact that climate change has had on the planet. According to the Intergovernmental Panel on Climate Change (IPCC) in their Sixth Assessment Report, climate change is a result of human actions, including increases in CO<sub>2</sub> and greenhouse gas emissions, and it is already affecting weather and extreme events worldwide.<sup>1</sup> At this point, the world needs to limit emissions to prevent warming the planet to 2<sup>o</sup>C; a threshold where extreme events would become even more widespread. In April of 2021, President Biden committed to reduce the United States greenhouse gas emissions by 50-52% by 2030 as part of the country’s contribution to the Paris Climate Agreement.<sup>2</sup> The US emits the second most greenhouse gases in the world, so hitting these targets and even going beyond them would help to curb warming effect on the climate. Electricity generation in the US is mainly fueled by coal and natural gas, which is why this area accounts for 25% of the country’s greenhouse gas emissions. By aggressively switching to renewable energy sources of electricity, the country can begin to achieve the climate goals and prevent further warming of the planet. Solar is a likely candidate as a renewable energy source because the cost of solar has dropped more than 70% over the last decade and is now competitively priced with other dirtier fuel sources.<sup>3</sup>
 
-This report aims to identify drivers of solar adoption in both the residential and the industrial sectors through a machine learning predictive model. For each sector, the model attempts to predict solar panel system count at the county level using a combination of socioeconomic, policy, and financial data related to the electricity market.
+This report aims to identify drivers of solar adoption in the residential sector through a machine learning predictive model. The model attempts to predict solar panel system count at the county level using a combination of socioeconomic, policy, and financial data related to the electricity market.
 
 ## Data
 The DeepSolar group at Stanford University created a comprehensive dataset that identified the size, type, and number of solar panels in each county across the United States.<sup>4</sup> The solar panel data was determined through a convolutional neural network (CNN) that used satellite imagery to classify panels and estimate their sizes with precision and recall performance around 90%.5 The dataset includes information for all 48 contiguous U.S. states. There are 72,537 rows and 168 columns. These correspond with information for 72,537 twelve digit Federal Information Processing System (FIPS) codes for census tract locations across the U.S. The columns included in the dataset fall within five categories: 
@@ -26,35 +26,21 @@ a.	Data related to incentives, taxes, and tariffs around solar energy\
 b.	Source: NC State Clean Energy Technology Center
 
 ## Results
-XGBoost performed the best for both the Residential and Non-Residential models.
+XGBoost had the best performance in terms of MSE and $R^2$
 
-| Target Sector | Method | Architecture | Best MSE | R<sup>2</sup> | Top <br> Features|
-| ------------- | ------ | ------------ | -------- | ------------- | ------- |
-Residential | Random <br> Forest | n_estimators: 1000 <br> min_samples_split: 5 <br> min_samples_leaf: 5 <br> max_features: 'sqrt' <br> max_depth: 20 <br> bootstrap: False| 552 | 0.753 | Education college <br> Daily solar radiation <br> Heating gas fuel | 
-| Residential | XGBoost | n_estimators: 1000 <br> learning_rate: 0.01 | 503 | 0.769 | Incentive count residential <br> Daily solar radiation <br> Education college |
-| Residential | Neural <br> Network | 3 hidden layers (128 units each, ReLU activation function) | 616 | 0.723 | Frost days <br> Daily solar radiation | Housing unit median value
-| Non-<br>Residential | Random <br> Forest | Default | 49.6 | 0.249 | Total area <br> Population density <br> Relative humidity | 
-| Non-<br>Residential | XGBoost | reg_lambda: 3 <br> reg_alpha: 1 <br> n_estimators: 300 <br> min_child_weight: 10 <br> max_depth: 20 <br> learning_rate: 0.01 <br> gamma: 0 <br> col_sample_bytree: 0.8 <br> booster: gbtree | 47 | 0.28 | Daily solar radiation <br> Industrial electricity price <br> Heating fuel solar | 
-|Non-<br>Residential | Neural<br>Network | 3 hidden layers (128 units each, ReLU activation function) <br> 20% dropout between layers 2 and 3 | 50 | 0.227 | Population density <br> Frost days <br> Total area <br> Daily solar radiation
+| Method | Architecture | Best MSE | R<sup>2</sup> | Top <br> Features|
+| ------ | ------------ | -------- | ------------- | ------- |
+| Random <br> Forest | n_estimators: 1000 <br> min_samples_split: 5 <br> min_samples_leaf: 5 <br> max_features: 'sqrt' <br> max_depth: 20 <br> bootstrap: False| 552 | 0.753 | Education college <br> Daily solar radiation <br> Heating gas fuel | 
+| XGBoost | n_estimators: 1000 <br> learning_rate: 0.01 | 503 | 0.769 | Incentive count residential <br> Daily solar radiation <br> Education college |
+| Neural <br> Network | 3 hidden layers (128 units each, ReLU activation function) | 616 | 0.723 | Frost days <br> Daily solar radiation | Housing unit median value
 
 The below plots show the correlation between the predicted and actual values for the best performing models as well as the top features. 
 
-### Residential Model Plots
+### Model Plots
 <p align="center">
     <img src="https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_system_count_errors_default.png?raw=TRUE">
     <img src = "https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_residential_fi.png?raw=TRUE">
 </p>
-
-
-### Non-Residential Model Plots
-<p align="center">
-    <img src="https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_scatter.png?raw=TRUE">
-    <img src = "https://github.com/gnyirjesy/Solar-Panel-Area-Prediction/blob/master/plots/xgboost_nonresidential_fi.png?raw=TRUE">
-</p>
-
-## Future Work
-The non-residential models tended to have low correlation between predicted values and actual values. In the future, this model could be improved by performing an initial classification to determine if a FIPS location has any non-residential solar systems before implementing the regression model on only those locations with non-residential systems. This additional step would help to address the class imbalance where most counties do not have any non-residential solar systems. \
-Further improvements could also include implementing more extensive hyperparameter tuning using a grid search over all settings rather than a random sample. Grid search is a computational and time intensive process and therefore was not within the scope of this project.  
 
 ## Sources
 1.	IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press. In Press.
